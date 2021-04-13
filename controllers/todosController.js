@@ -1,19 +1,50 @@
+const { Todo } = require('../models')
+
 class TodosController {
 
   static postTodos(req, res) {
-    res.send('create new todo')
+    const { title, description, status, due_date } = req.body
+
+    Todo.create({ title, description, status, due_date })
+    .then(todo => {
+        const { title, description, status, due_date } = todo
+        res.status(201).json({ title, description, status, due_date })
+    })
+    .catch(err => {
+      res.status(500).json(err)
+    })
   }
 
   static getTodos(req, res) {
-    res.send('display todos')    
+    Todo.findAll({ attributes: { exclude: [ 'createdAt', 'updatedAt' ] } })
+    .then(todos => {
+        res.status(200).json(todos)
+    })
+    .catch(err => {
+      res.status(500).json(err)
+    })
   }
 
   static getTodosId(req, res) {
-    res.send('display todo by id')
+    const { id } = req.params
+
+    Todo.findAll({ where: { id: +id }, attributes: { exclude: ['createdAt', 'updatedAt'] } })
+    .then(todo => {
+      res.status(200).json(todo)
+    })
+    .catch(err => {
+      res.status (500).json(err)
+    })
   }
 
   static putTodosId(req, res) {
-    res.send('edit all element in todo by id')
+    const { id } = req.params
+    const { title, description, status, due_date } = req.body
+
+    Todo.update({ where: {id: +id}, title, description, status, due_date})
+    .then(todo => {
+      console.log(todo);
+    })
   }
 
   static patchTodosId(req, res) {
