@@ -1,7 +1,6 @@
 const { Todo } = require('../models')
 
 class TodosController {
-
   static postTodos(req, res) {
     const { title, description, status, due_date } = req.body
 
@@ -11,7 +10,12 @@ class TodosController {
         res.status(201).json({ title, description, status, due_date })
     })
     .catch(err => {
-      res.status(500).json(err)
+      if(err.name === "SequelizeValidationError") {
+        res.status(400).json({ error: "SequelizeValidationError" })
+      }
+      else {
+        res.status(500).json({ error: "Internal Server Error "})
+      }
     })
   }
 
@@ -21,7 +25,7 @@ class TodosController {
         res.status(200).json(todos)
     })
     .catch(err => {
-      res.status(500).json(err)
+      res.status(500).json({ error: "Internal Server Error" })
     })
   }
 
@@ -30,13 +34,10 @@ class TodosController {
 
     Todo.findByPk(+id, { attributes: { exclude: ['createdAt', 'updatedAt'] } })
     .then(todo => {
-      if(todo) {
         res.status(200).json(todo)
-      }
-      else res.status(404).json({err: "not found"})
     })
     .catch(err => {
-      res.status (500).json(err)
+      res.status(404).json({ err: "not found" })
     })
   }
 
@@ -62,7 +63,7 @@ class TodosController {
       res.status(200).json({ title: todo.title, description: todo.description, status: todo.status, due_date: todo.due_date })
     })
     .catch(err => {
-      res.status(500).json(err)
+      res.status(500).json({ error: "Internal Server Error" })
     })
   }
 
@@ -83,7 +84,12 @@ class TodosController {
       res.status(200).json({ title: todo.title, description: todo.description, status: todo.status, due_date: todo.due_date })
     })
     .catch(err => {
-      res.status(500).json(err)
+      if(err.name === "SequelizeValidationError") {
+        res.status(400).json({ error: "SequelizeValidationError" })
+      }
+      else {
+        res.status(500).json({ error: "Internal Server Error" })
+      }
     })
   }
 
@@ -95,11 +101,11 @@ class TodosController {
       if(result) return result.destroy()
       else res.status(404).json({ error: "not found" })
     })
-    .then(result => {
-      res.status(200).json({message: "todo success to delete"})
+    .then(_ => {
+      res.status(200).json({ message: "todo success to delete" })
     })
     .catch(err => {
-      res.status(500).json(err)
+      res.status(500).json({ error: "Internal Server Error" })
     })
   }
 

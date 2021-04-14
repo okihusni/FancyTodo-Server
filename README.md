@@ -1,9 +1,12 @@
 # FancyTodo-Server
 Fancy Todo - Server
-* RESTful endpoint for CRUD operation
+* RESTful endpoint for Todo CRUD operation
+* RESTful endpoint for User register and login
 * Initiate `npm init` to install all dependency required
 
 ## Available Endpoint
+_Todos_
+
 * `POST /todos`
 * `GET /todos`
 * `GET /todos/:id`
@@ -11,20 +14,42 @@ Fancy Todo - Server
 * `PATCH /todos/:id`
 * `DELETE /todos/:id`
 
+_Users_
+
+* `POST /users/register`
+* `POST /users/login`
+
 ## RESTful Endpoint
 
-### POST /todos
+### Add Todo
+Adding new todo to the list
 
-> Create new todo
+* _URL_
 
-* _Request Body_
+  ```
+  /todos
+  ```
 
-  ```json
+* _Method_
+
+  ```
+  POST
+  ```
+
+* _URL Params_
+
+  ```
+  None
+  ```
+
+* _Data Params_
+
+  ```
   {
-    "title": "Learning",
-    "description": "Learning RESTful API",
-    "status": "open",
-    "due_date": "2021-04-20"
+    "title": req.body.title,
+    "description": req.body.title,
+    "status": req.body.status,
+    "due_date": req.body.due_date
   }
   ```
 
@@ -32,57 +57,74 @@ Fancy Todo - Server
 
   **Code 201**
 
-  ```json
+  ```
   {
-    "id": 1,
-    "title": "Learning",
-    "description": "Learning RESTful API",
-    "status": "open",
-    "due_date": "2021-04-20"
+    "title": req.body.title,
+    "description": req.body.title,
+    "status": req.body.status,
+    "due_date": req.body.due_date
   }
   ```
 
   **Code 400**
 
   ```
-  { error : "SequelizeValidationError" }
+  { "error": "SequelizeValidationError" }
   ```
 
   **Code 500**
 
   ```
-  Internal Server Error
+  { "error": "Internal Server Error" }
   ```
 
-### GET /todos
+### Display todo
 
-> Display todo list
+> Display all todo list
 
-* _Request Body_
+* _URL_
 
   ```
-  No need
+  /todos
+  ```
+
+* _Method_
+
+  ```
+  GET
+  ```
+
+* _URL Params_
+
+  ```
+  None
+  ```
+
+* _Data Params_
+
+  ```
+  None
   ```
 
 * _Response_
 
   **Code 200**
 
-  ```json
+  ```
   [
     {
       "id": 1,
-      "title": "Learning",
-      "description": "Learning RESTful API",
-      "status": "done",
-      "due_date": "2021-04-20"
+      "title": req.body.title,
+      "description": req.body.title,
+      "status": req.body.status,
+      "due_date": req.body.due_date
     },
     {
       "id": 2,
-      "title": "Coding",
-      "description": "Coding RESTful API",
-      "status": "open",
-      "due_date": "2021-04-20"
+      "title": req.body.title,
+      "description": req.body.title,
+      "status": req.body.status,
+      "due_date": req.body.due_date
     }
   ]
   ```
@@ -90,89 +132,143 @@ Fancy Todo - Server
   **Code 500**
 
   ```
-  Internal Server Error
+  { "error": "Internal Server Error" }
   ```
 
-### GET /todos/:id
+### Display by id
 
-> Display todo list
+> Display todo by id
 
-* _Request Body_
-
-  ```
-  No need
-  ```
-
-* _Response_
-
-  **Code 200**
-
-  ```json
-  {
-    "id": 2,
-    "title": "Coding",
-    "description": "Coding RESTful API",
-    "status": "open",
-    "due_date": "2021-04-20"
-  }
-  ```
-
-  **Code 404**
+* _URL_
 
   ```
-  { error: "not found" }
+  /todos
   ```
 
-### PUT /todos/:id
+* _Method_
 
-> Edit all todo element
+  ```
+  GET
+  ```
 
-* _Request Body_
+* _URL Params_
 
-  ```json
-  {
-    "title": "Coding API",
-    "description": "Coding RESTful API + JWT",
-    "status": "done",
-    "due_date": "2021-04-14"
-  }
+  ```
+  id
+  ```
+
+* _Data Params_
+
+  ```
+  None
   ```
 
 * _Response_
 
   **Code 200**
 
-  ```json
+  ```
   {
-    "id": 2,
-    "title": "Coding API",
-    "description": "Coding RESTful API + JWT",
-    "status": "done",
-    "due_date": "2021-04-14"
+    "id": 1,
+    "title": req.body.title,
+    "description": req.body.title,
+    "status": req.body.status,
+    "due_date": req.body.due_date
   }
   ```
 
   **Code 404**
 
   ```
-  { error: "not found" }
+  { "error": "not found" }
+  ```
+
+### Edit todo
+
+> Edit all todo element by id
+
+* _URL_
+
+  ```
+  /todos
+  ```
+
+* _Method_
+
+  ```
+  PUT
+  ```
+
+* _URL Params_
+
+  ```
+  id
+  ```
+
+* _Data Params_
+
+  ```
+  {
+    "title": req.body.title,
+    "description": req.body.title,
+    "status": req.body.status,
+    "due_date": req.body.due_date
+  }
+  ```
+
+* _Response_
+
+  **Code 200**
+
+  ```
+  {
+    "id": 1,
+    "title": req.body.title,
+    "description": req.body.title,
+    "status": req.body.status,
+    "due_date": req.body.due_date
+  }
+  ```
+
+  **Code 404**
+
+  ```
+  { "error": "not found" }
   ```
 
   **Code 500**
 
   ```
-  Internal Server Error
+  { "error": "Internal Server Error" }
   ```  
 
-### PATCH /todos/:id
+### Update todo
 
-> Edit todo status
+> Update todo status by id
 
-* _Request Body_
+* _URL_
 
-  ```json
+  ```
+  /todos
+  ```
+
+* _Method_
+
+  ```
+  PATCH
+  ```
+
+* _URL Params_
+
+  ```
+  id
+  ```
+
+* _Data Params_
+
+  ```
   {
-    "status": "open",
+    "status": req.body.status
   }
   ```
 
@@ -180,12 +276,12 @@ Fancy Todo - Server
 
   **Code 200**
 
-  ```json
+  ```
   {
-    "id": 2,
+    "id": 1,
     "title": "Coding API",
     "description": "Coding RESTful API + JWT + Documentation",
-    "status": "open",
+    "status": req.body.status,
     "due_date": "2021-04-14"
   }
   ```
@@ -193,29 +289,47 @@ Fancy Todo - Server
   **Code 400**
 
   ```
-  { error : "SequelizeValidationError" }
+  { "error" : "SequelizeValidationError" }
   ```
 
   **Code 404**
 
   ```
-  { error: "not found" }
+  { "error" : "not found" }
   ```
 
   **Code 500**
 
   ```
-  Internal Server Error
+  { "error": "Internal Server Error" }
   ```
 
-### DELETE /todos/:id
+### Delete todo
 
-> Delete todo
+> Delete todo by id
 
-* _Request Body_
+* _URL_
 
-  ```json
-  No need
+  ```
+  /todos
+  ```
+
+* _Method_
+
+  ```
+  DELETE
+  ```
+
+* _URL Params_
+
+  ```
+  id
+  ```
+
+* _Data Params_
+
+  ```
+  None
   ```
 
 * _Response_
@@ -223,17 +337,72 @@ Fancy Todo - Server
   **Code 200**
 
   ```
-  message: "todo success to delete"
+  { "message": "todo success to delete" }
   ```
 
   **Code 404**
 
   ```
-  { error: "not found" }
+  { "error": "not found" }
   ```
 
   **Code 500**
 
   ```
-  Internal Server Error
+  { "error": "Internal Server Error" }
+  ```
+
+### User Register
+
+> Create / register new user
+
+* _URL_
+
+  ```
+  /users/register
+  ```
+
+* _Method_
+
+  ```
+  POST
+  ```
+
+* _URL Params_
+
+  ```
+  None
+  ```
+
+* _Data Params_
+
+  ```
+  {
+    "email": req.body.email,
+    "password": req.body.password
+  }
+  ```
+
+* _Response_
+
+  **Code 201**
+
+  ```
+  {
+    "id": 1,
+    "email": req.body.email,
+    "password": req.body.password
+  }
+  ```
+
+  **Code 400**
+
+  ```
+  { "error": "not found" }
+  ```
+
+  **Code 500**
+
+  ```
+  { "error": "Internal Server Error" }
   ```

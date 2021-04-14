@@ -1,11 +1,11 @@
-const todosController = require('../controllers/todosController')
+const TodosController = require('../controllers/TodosController')
 const router = require('express').Router()
 
-router.post('/', todosController.postTodos)
-router.get('/', todosController.getTodos)
-router.get('/:id', todosController.getTodosId)
-router.put('/:id', todosController.putTodosId)
-router.patch('/:id', todosController.patchTodosId)
-router.delete('/:id', todosController.deleteTodosId)
+router.post('/', TodosController.postTodos)
+router.get('/', TodosController.getTodos)
+router.get('/:id', TodosController.getTodosId)
+router.put('/:id', TodosController.putTodosId)
+router.patch('/:id', TodosController.patchTodosId)
+router.delete('/:id', TodosController.deleteTodosId)
 
 module.exports = router
