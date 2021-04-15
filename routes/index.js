@@ -1,11 +1,9 @@
 const router = require('express').Router()
+const UserController = require('../controllers/UsersController')
 const todosRouter = require('./todos')
-const usersRouter = require('./users')
 
-router.get('/', (req, res) => {
-  res.send('Todos landing page')
-})
+router.post('/register', UserController.register)
+router.post('/login', UserController.login)
 router.use('/todos', todosRouter)
-router.use('/users', usersRouter)
 
 module.exports = router

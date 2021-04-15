@@ -59,6 +59,7 @@ Adding new todo to the list
 
   ```
   {
+    "id": 1,
     "title": req.body.title,
     "description": req.body.title,
     "status": req.body.status,
@@ -389,16 +390,14 @@ Adding new todo to the list
 
   ```
   {
-    "id": 1,
-    "email": req.body.email,
-    "password": req.body.password
+    "message": "Success registering"
   }
   ```
 
   **Code 400**
 
   ```
-  { "error": "not found" }
+  { "error": "SequelizeValidationError" }
   ```
 
   **Code 500**

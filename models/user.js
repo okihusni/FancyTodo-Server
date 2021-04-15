@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      User.hasMany(model.Todo, { foreignKey: 'userId' })
+      User.hasMany(models.Todo, { foreignKey: 'userId' })
     }
   };
   User.init({
@@ -27,11 +27,10 @@ module.exports = (sequelize, DataTypes) => {
     password: {
       type: DataTypes.STRING,
       validate: {
-        notEmpty: {
-          args: true,
-          msg: "Password can't be empty!"
-        },
-        min: 6
+        len: {
+          args: [6, 30],
+          msg: "Password length should be min 6 and max 30 characters"
+        }
       }
     },
   }, {
@@ -39,9 +38,7 @@ module.exports = (sequelize, DataTypes) => {
     hooks: {
       beforeCreate(instance) {
         var salt = bcrypt.genSaltSync(10);
-        var hash = bcrypt.hashSync(instance.password, salt)
-
-        instance.password = hash
+        instance.password = bcrypt.hashSync(instance.password, salt)
       }
     },
     modelName: 'User',

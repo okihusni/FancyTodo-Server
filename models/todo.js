@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 const yesterdayDate = require('../helpers/yesterdayDate');
 
 module.exports = (sequelize, DataTypes) => {
