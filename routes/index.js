@@ -1,9 +1,11 @@
 const router = require('express').Router()
-const UserController = require('../controllers/UsersController')
+const { authentication } = require('../middlewares/auth')
 const todosRouter = require('./todos')
+const usersRouter = require('./users')
 
-router.post('/register', UserController.register)
-router.post('/login', UserController.login)
+router.get('/', (req, res) => res.send('home'))
+router.use('/users', usersRouter)
+router.use(authentication)
 router.use('/todos', todosRouter)
 
 module.exports = router

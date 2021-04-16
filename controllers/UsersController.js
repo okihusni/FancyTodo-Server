@@ -25,15 +25,15 @@ class UserController {
 
     User.findOne({ where: { email } })
     .then(user => {
-      if(!user) {
-        res.status(401).json({ error: "Invalid email/password" })
-      }
-      else if(bcrypt.compareSync(password, user.password)) {
+      if(user && bcrypt.compareSync(password, user.password)) {
         const access_token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' })
         res.status(200).json({ access_token })
       }
       else {
-        res.status(401).json({ error: "Invalid email/password" })
+        throw {
+          code: 401,
+          error: "Invalid email or password"
+        }
       }
     })
     .catch(err => {

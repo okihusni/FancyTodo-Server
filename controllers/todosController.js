@@ -1,115 +1,81 @@
-const { Todo } = require('../models')
+const { Todo } = require('../models');
 
 class TodosController {
   static postTodos(req, res) {
-    const { title, description, status, due_date } = req.body
+    const { title, description, status, due_date } = req.body;
 
-    Todo.create({ title, description, status, due_date })
+    Todo.create({ title, description, status, due_date, userId: req.userId })
     .then(todo => {
-        res.status(201).json({ data: todo})
+        res.status(201).json({ data: todo});
     })
     .catch(err => {
       if(err.name === "SequelizeValidationError") {
-        res.status(400).json({ error: "SequelizeValidationError" })
+        res.status(400).json({ error: "SequelizeValidationError" });
       }
       else {
-        res.status(500).json({ error: "Internal Server Error "})
-      }
-    })
-  }
+        res.status(500).json({ error: "Internal Server Error "});
+      };
+    });
+  };
 
   static getTodos(req, res) {
-    Todo.findAll()
+    Todo.findAll({where: { userId: req.userId } })
     .then(todos => {
-        res.status(200).json({ data: todos })
+        res.status(200).json({ data: todos });
     })
     .catch(err => {
-      res.status(500).json({ error: "Internal Server Error" })
-    })
-  }
+      res.status(500).json({ error: "Internal Server Error" });
+    });
+  };
 
   static getTodosId(req, res) {
-    const { id } = req.params
-
-    Todo.findByPk(+id)
-    .then(todo => {
-        res.status(200).json(todo)
-    })
-    .catch(err => {
-      res.status(404).json({ err: "not found" })
-    })
-  }
+    res.status(200).json({ data: req.todo });
+  };
 
   static putTodosId(req, res) {
-    const { id } = req.params
-    const { title, description, status, due_date } = req.body
+    const { title, description, status, due_date } = req.body;
+    const { todo } = req;
 
-    Todo.findByPk(+id)
-    .then(todo => {
-      if(todo) {
-        todo.title = title
-        todo.description = description
-        todo.status = status
-        todo.due_date = due_date
-
-        return todo.save()
-      }
-      else {
-        res.status(404).json({error: "not found"})
-      }
-    })
-    .then(todo => {
-      const { id, title, description, status, due_date } = todo
-      res.status(200).json({ id, title, description, status, due_date })
+    todo.title = title;
+    todo.description = description;
+    todo.status = status;
+    todo.due_date = due_date;
+    todo.save()
+    .then(todo => { 
+      res.status(200).json({ data: todo }) 
     })
     .catch(err => {
-      res.status(500).json({ error: "Internal Server Error" })
-    })
-  }
+      res.status(500).json({ error: "Internal Server Error" });
+    });
+  };
 
   static patchTodosId(req, res) {
-    const { id } = req.params
-    const { status } = req.body
+    const { status } = req.body;
+    const { todo } = req;
+    console.log(todo);
 
-    Todo.findByPk(+id)
+    todo.status = status;
+    todo.save()
     .then(todo => {
-      if(todo) {
-        todo.status = status
-
-        return todo.save()
-      }
-      else res.status(404).json({error: "not found"})
-    })
-    .then(todo => {
-      const { id, title, description, status, due_date } = todo
-      res.status(200).json({ id, title, description, status, due_date })
+      res.status(200).json({ data: todo });
     })
     .catch(err => {
-      if(err.name === "SequelizeValidationError") {
-        res.status(400).json({ error: "SequelizeValidationError" })
-      }
-      else {
-        res.status(500).json({ error: "Internal Server Error" })
-      }
-    })
-  }
+      res.status(500).json({ error: "Internal Server Error" });
+    });
+  };
 
   static deleteTodosId(req, res) {
-    const { id } = req.params
+    const { todo } = req;
 
-    Todo.findByPk(+id)
-    .then(result => {
-      if(result) return result.destroy()
-      else res.status(404).json({ error: "not found" })
-    })
+    todo.destroy()
     .then(_ => {
-      res.status(200).json({ message: "todo success to delete" })
+      res.status(200).json({ message: "todo success to delete" });
     })
     .catch(err => {
-      res.status(500).json({ error: "Internal Server Error" })
-    })
-  }
-
+      res.status(500).json({ error: "Internal Server Error" });
+    });
+  };
+  
 }
 
 module.exports = TodosController

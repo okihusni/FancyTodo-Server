@@ -405,3 +405,56 @@ Adding new todo to the list
   ```
   { "error": "Internal Server Error" }
   ```
+
+  ### User Login
+
+> login to app
+
+* _URL_
+
+  ```
+  /users/login
+  ```
+
+* _Method_
+
+  ```
+  POST
+  ```
+
+* _URL Params_
+
+  ```
+  None
+  ```
+
+* _Data Params_
+
+  ```
+  {
+    "email": req.body.email,
+    "password": req.body.password
+  }
+  ```
+
+* _Response_
+
+  **Code 201**
+
+  ```
+  {
+    "access_token": access_token
+  }
+  ```
+
+  **Code 401**
+
+  ```
+  { "error": "Invalid email or password" }
+  ```
+
+  **Code 500**
+
+  ```
+  { "error": "Internal Server Error" }
+  ```
