@@ -1,38 +1,29 @@
 const { Todo } = require('../models');
 
 class TodosController {
-  static postTodos(req, res) {
+  static postTodos(req, res, next) {
     const { title, description, status, due_date } = req.body;
 
     Todo.create({ title, description, status, due_date, userId: req.userId })
     .then(todo => {
-        res.status(201).json({ data: todo});
+        res.status(201).json({ data: todo });
     })
-    .catch(err => {
-      if(err.name === "SequelizeValidationError") {
-        res.status(400).json({ error: "SequelizeValidationError" });
-      }
-      else {
-        res.status(500).json({ error: "Internal Server Error "});
-      };
-    });
+    .catch(err => { next(err) });
   };
 
-  static getTodos(req, res) {
+  static getTodos(req, res, next) {
     Todo.findAll({where: { userId: req.userId } })
     .then(todos => {
         res.status(200).json({ data: todos });
     })
-    .catch(err => {
-      res.status(500).json({ error: "Internal Server Error" });
-    });
+    .catch(err =>  next(err) );
   };
 
   static getTodosId(req, res) {
     res.status(200).json({ data: req.todo });
   };
 
-  static putTodosId(req, res) {
+  static putTodosId(req, res, next) {
     const { title, description, status, due_date } = req.body;
     const { todo } = req;
 
@@ -44,12 +35,10 @@ class TodosController {
     .then(todo => { 
       res.status(200).json({ data: todo }) 
     })
-    .catch(err => {
-      res.status(500).json({ error: "Internal Server Error" });
-    });
+    .catch(err => next(err));
   };
 
-  static patchTodosId(req, res) {
+  static patchTodosId(req, res, next) {
     const { status } = req.body;
     const { todo } = req;
     console.log(todo);
@@ -59,21 +48,17 @@ class TodosController {
     .then(todo => {
       res.status(200).json({ data: todo });
     })
-    .catch(err => {
-      res.status(500).json({ error: "Internal Server Error" });
-    });
+    .catch(err => next(err));
   };
 
-  static deleteTodosId(req, res) {
+  static deleteTodosId(req, res, next) {
     const { todo } = req;
 
     todo.destroy()
     .then(_ => {
       res.status(200).json({ message: "todo success to delete" });
     })
-    .catch(err => {
-      res.status(500).json({ error: "Internal Server Error" });
-    });
+    .catch(err => next(err));
   };
   
 }

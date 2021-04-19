@@ -45,9 +45,17 @@ module.exports = (sequelize, DataTypes) => {
     due_date: {
       type: DataTypes.DATE,
       validate: {
+        notEmpty: {
+          args: true,
+          msg: "Date must not be empty!"
+        },
+        isDate: {
+          args: true,
+          msg: "Only date format allowed"
+        },
         isAfter: {
           args: yesterdayDate.toISOString(),
-          msg: "Date must not be yesterday"
+          msg: "Can't input yesterday date!"
         }
       }
     },

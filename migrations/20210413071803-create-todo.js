@@ -10,18 +10,22 @@ module.exports = {
       },
       title: {
         allowNull: false,
+        notEmpty: true,
         type: Sequelize.STRING
       },
       description: {
         allowNull: false,
+        notEmpty: true,
         type: Sequelize.STRING
       },
       status: {
         allowNull: false,
+        notEmpty: true,
         type: Sequelize.STRING
       },
       due_date: {
         allowNull: false,
+        notEmpty: true,
         type: Sequelize.DATE
       },
       createdAt: {

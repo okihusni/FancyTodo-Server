@@ -1,6 +1,6 @@
 'use strict';
 const { Model } = require('sequelize');
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcryptjs');
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -11,26 +11,33 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      User.hasMany(models.Todo, { foreignKey: 'userId' })
-    }
+      User.hasMany(models.Todo, { foreignKey: 'userId' });
+    };
   };
   User.init({
     email: {
       type: DataTypes.STRING,
       validate: {
+        notEmpty: {
+          args: true,
+          msg: "Email must not be empty"
+        },
         isEmail: {
           args: true,
-          msg: "Please input the correct mail!"
+          msg: "Invalid email address"
         }
       }
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false,
       validate: {
+        notEmpty: {
+          args: true,
+          msg: "Password must not be empty"
+        },
         len: {
           args: [6, 30],
-          msg: "Password length should be min 6 and max 30 characters"
+          msg: "Password should be between 6 to 30 characters"
         }
       }
     },

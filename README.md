@@ -1,8 +1,16 @@
 # FancyTodo-Server
-Fancy Todo - Server
-* RESTful endpoint for Todo CRUD operation
-* RESTful endpoint for User register and login
-* Initiate `npm init` to install all dependency required
+_Fancy todo app berfungsi untuk mendata list apa yang akan user kerjakan._
+_Applikasi ini dibuat menggunakan postgre sebagai databasenya._
+
+***Getting Started***
+
+* _Jalankan `npm install` di terminal;_
+* _Edit `config.json` sesuai kebutuhan;_
+* _Edit `.env-template` menjadi `.env` dan edit credential sesuai kebutuhan;_
+* _Jalankan `npm run db:teardown` untuk mendelete database;_
+* _Jalankan `npm run db:setup` untuk membuat database dari awal lagi;_
+* _Jalankan `npm run dev` untuk menjalankan applikasi._
+
 
 ## Available Endpoint
 _Todos_
@@ -22,7 +30,7 @@ _Users_
 ## RESTful Endpoint
 
 ### Add Todo
-Adding new todo to the list
+> Menambahkan todo baru
 
 * _URL_
 
@@ -57,6 +65,8 @@ Adding new todo to the list
 
   **Code 201**
 
+  Jika request berhasil
+
   ```
   {
     "id": 1,
@@ -69,19 +79,38 @@ Adding new todo to the list
 
   **Code 400**
 
+  Validasi tidak terpenuhi,
+
+  jika ada value attributes berupa `empty string` maka akan mengeluarkan error validasi sesuai attributenya
+
   ```
-  { "error": "SequelizeValidationError" }
+  {
+    "errors": [
+      "Title can't be empty!",
+      "Description can't be empty!",
+      "Status can't be empty!",
+      "Date must not be empty!",
+      "Only date format allowed",
+      "Can't input yesterday date!"
+    ]
+  }
   ```
 
   **Code 500**
 
+  Jika value dari attributes ada yang `tidak ada` atau `null`
+
   ```
-  { "error": "Internal Server Error" }
+  {
+    "errors": [
+      "Internal server error"
+    ]
+  }
   ```
 
 ### Display todo
 
-> Display all todo list
+> Menampilkan semua todo list dari user 
 
 * _URL_
 
@@ -111,6 +140,8 @@ Adding new todo to the list
 
   **Code 200**
 
+  Jika request berhasil
+
   ```
   [
     {
@@ -132,13 +163,19 @@ Adding new todo to the list
 
   **Code 500**
 
+  Jika request gagal karena server error
+
   ```
-  { "error": "Internal Server Error" }
+  {
+    "errors": [
+      "Internal server error"
+    ]
+  }
   ```
 
 ### Display by id
 
-> Display todo by id
+> Menampilkan todo berdasarkan todo id
 
 * _URL_
 
@@ -168,6 +205,8 @@ Adding new todo to the list
 
   **Code 200**
 
+  Jika request berhasil
+
   ```
   {
     "id": 1,
@@ -180,13 +219,19 @@ Adding new todo to the list
 
   **Code 404**
 
+  Jika todo tidak ditemukan
+
   ```
-  { "error": "not found" }
+  {
+    "errors": [
+      "Todo not found"
+    ]
+  }
   ```
 
 ### Edit todo
 
-> Edit all todo element by id
+> Edit value dari todo yang ditemukan
 
 * _URL_
 
@@ -221,6 +266,8 @@ Adding new todo to the list
 
   **Code 200**
 
+  Jika request berhasil
+
   ```
   {
     "id": 1,
@@ -231,21 +278,52 @@ Adding new todo to the list
   }
   ```
 
-  **Code 404**
+  **Code 400**
+
+  Validasi tidak terpenuhi,
+
+  jika ada value attributes berupa `empty string` maka akan mengeluarkan error validasi sesuai attributenya
 
   ```
-  { "error": "not found" }
+  {
+    "errors": [
+      "Title can't be empty!",
+      "Description can't be empty!",
+      "Status can't be empty!",
+      "Date must not be empty!",
+      "Only date format allowed",
+      "Can't input yesterday date!"
+    ]
+  }
+  ```
+
+  **Code 404**
+
+  Jika todo tidak ditemukan
+
+  ```
+  {
+    "errors": [
+      "Todo not found"
+    ]
+  }
   ```
 
   **Code 500**
 
+  Jika request gagal karena server error
+
   ```
-  { "error": "Internal Server Error" }
+  {
+    "errors": [
+      "Internal server error"
+    ]
+  }
   ```  
 
 ### Update todo
 
-> Update todo status by id
+> Update todo status
 
 * _URL_
 
@@ -277,6 +355,8 @@ Adding new todo to the list
 
   **Code 200**
 
+  Jika request berhasil
+
   ```
   {
     "id": 1,
@@ -289,20 +369,40 @@ Adding new todo to the list
 
   **Code 400**
 
+  Validasi tidak terpenuhi,
+
+  jika ada value attributes status berupa `empty string` maka akan mengeluarkan error validasi sesuai attributenya
+
   ```
-  { "error" : "SequelizeValidationError" }
+  {
+    "errors": [
+      "Status can't be empty!"
+    ]
+  }
   ```
 
   **Code 404**
 
+  Jika todo tidak ditemukan
+
   ```
-  { "error" : "not found" }
+  {
+    "errors": [
+      "Todo not found"
+    ]
+  }
   ```
 
   **Code 500**
 
+  Jika request gagal karena server error
+
   ```
-  { "error": "Internal Server Error" }
+  {
+    "errors": [
+      "Internal server error"
+    ]
+  }
   ```
 
 ### Delete todo
@@ -337,25 +437,39 @@ Adding new todo to the list
 
   **Code 200**
 
+  Jika request berhasil
+
   ```
   { "message": "todo success to delete" }
   ```
 
   **Code 404**
 
+  Jika todo tidak ditemukan
+
   ```
-  { "error": "not found" }
+  {
+    "errors": [
+      "Todo not found"
+    ]
+  }
   ```
 
   **Code 500**
 
+  Jika request gagal karena server error
+
   ```
-  { "error": "Internal Server Error" }
+  {
+    "errors": [
+      "Internal server error"
+    ]
+  }
   ```
 
 ### User Register
 
-> Create / register new user
+> Buat / daftar user baru
 
 * _URL_
 
@@ -388,6 +502,8 @@ Adding new todo to the list
 
   **Code 201**
 
+  Jika request berhasil
+
   ```
   {
     "message": "Success registering"
@@ -396,19 +512,34 @@ Adding new todo to the list
 
   **Code 400**
 
+  Jika validasi tidak terpenuhi
+
   ```
-  { "error": "SequelizeValidationError" }
+  {
+    "errors": [
+      "Email must not be empty",
+      "Invalid email address",
+      "Password must not be empty",
+      "Password should be between 6 to 30 characters"
+    ]
+  }
   ```
 
   **Code 500**
 
+  Jika request gagal karena server error
+
   ```
-  { "error": "Internal Server Error" }
+  {
+    "errors": [
+      "Internal server error"
+    ]
+  }
   ```
 
   ### User Login
 
-> login to app
+> login ke applikasi
 
 * _URL_
 
@@ -441,6 +572,8 @@ Adding new todo to the list
 
   **Code 201**
 
+  Jika request berhasil
+
   ```
   {
     "access_token": access_token
@@ -449,12 +582,24 @@ Adding new todo to the list
 
   **Code 401**
 
+  Jika validasi tidak terpenuhi
+
   ```
-  { "error": "Invalid email or password" }
+ {
+    "errors": [
+      "Wrong email or password"
+    ]
+  }
   ```
 
   **Code 500**
 
+  Jika request gagal karena server error
+
   ```
-  { "error": "Internal Server Error" }
+  {
+    "errors": [
+      "Internal server error"
+    ]
+  }
   ```

@@ -1,45 +1,31 @@
-const { User } = require('../models')
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
+const { User } = require('../models');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 class UserController {
-  static register(req, res) {
-    const { email, password } = req.body
+  static register(req, res, next) {
+    const { email, password } = req.body;
 
     User.create({ email, password })
-    .then(user => {
-      res.status(201).json({ message: "Success registering" })
+    .then(() => {
+      res.status(201).json({ message: "Success registering" });
     })
-    .catch(err => {
-      if(err.name === "SequelizeValidationError") {
-        res.status(400).json({ error: "SequelizeValidationError" })
-      }
-      else {
-        res.status(500).json({ error: "Internal Server Error" })
-      }
-    })
-  }
+    .catch(err => { next(err) });
+  };
 
-  static login(req, res) {
-    const { email, password } = req.body
+  static login(req, res, next) {
+    const { email, password } = req.body;
 
     User.findOne({ where: { email } })
     .then(user => {
       if(user && bcrypt.compareSync(password, user.password)) {
-        const access_token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' })
-        res.status(200).json({ access_token })
+        const access_token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        return res.status(200).json({ access_token });
       }
-      else {
-        throw {
-          code: 401,
-          error: "Invalid email or password"
-        }
-      }
+      throw { name: "LOGIN_FAIL" };
     })
-    .catch(err => {
-      res.status(500).json({ error: "Internal Server Error " })
-    })
-  }
-}
+    .catch(err => { next(err) });
+  };
+};
 
 module.exports = UserController

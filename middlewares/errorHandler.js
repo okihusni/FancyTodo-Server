@@ -1,28 +1,44 @@
 const errorHandler = (err, req, res, next) => {
-  console.log(err, '<<<< error');
+  console.log(err.name, '<<<< error name');
+  console.log(err.errors, '<<<< error errors');
   let statusCode;
-  let errorMessage;
+  let errors = [];
 
   switch(err.name) {
     case 'SequelizeValidationError':
+      console.log(err.errors.map((el) => el.message));
       statusCode = 400;
-      errorMessage = 'Bad Request';
+      errors = err.errors ? err.errors.map((el) => el.message) : [];
       break;
-    case '':
+    case 'LOGIN_FAIL':
       statusCode = 401;
-      errorMessage = 'Unauthorized';
-    case 'SequelizeUniqueConstraintError':
-      statusCode = 403;
-      errorMessage = 'Email has been used';
+      errors.push('Wrong email or password');
       break;
-    case 'ReferenceError':
+    case 'TokenExpiredError':
+      statusCode = 401;
+      errors.push('Your session has been expired');
+      break;
+    case 'MISSING_ACCESS_TOKEN':
+      statusCode = 401;
+      errors.push('Missing access token');
+      break;
+    case 'INVALID_ACCESS_TOKEN':
+      statusCode = 401;
+      errors.push('Invalid access token');
+      break;
+    case 'TODO_NOT_FOUND':
       statusCode = 404;
-      errorMessage = 'Not Found';
+      errors.push('Todo not found');
+      break;
+    case 'SequelizeUniqueConstraintError':
+      statusCode = 409;
+      errors.push('Email has been registered');
       break;
     default:
       statusCode = 500;
-      errorMessage = 'Internal server error';
+      errors.push('Internal server error');
   }
+  res.status(statusCode).json({ errors });
 }
 
 module.exports = errorHandler
