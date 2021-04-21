@@ -1,6 +1,4 @@
 const errorHandler = (err, req, res, next) => {
-  console.log(err.name, '<<<< error name');
-  console.log(err.errors, '<<<< error errors');
   let statusCode;
   let errors = [];
 
