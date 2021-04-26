@@ -1,15 +1,20 @@
 # FancyTodo-Server
-_Fancy todo app berfungsi untuk mendata list apa yang akan user kerjakan._
-_Applikasi ini dibuat menggunakan postgre sebagai databasenya._
+_Fancy todo - Cooking Todo app berfungsi untuk mencatat berbagai kegiatan yang akan dikerjakan khususnya tentang masak memasak._
+_Applikasi ini menggunakan postgre sebagai databasenya dan SPOONACULAR sebagai 3rd party API._
 
-***Getting Started***
+***Getting Started for Server Side***
 
-* _Jalankan `npm install` di terminal;_
-* _Edit `config.json` sesuai kebutuhan;_
-* _Edit `.env-template` menjadi `.env` dan edit credential sesuai kebutuhan;_
-* _Jalankan `npm run db:teardown` untuk mendelete database;_
-* _Jalankan `npm run db:setup` untuk membuat database dari awal lagi;_
-* _Jalankan `npm run dev` untuk menjalankan applikasi._
+* _Jalankan `npm install` di terminal._
+* _Edit `config.json` sesuai kebutuhan / database._
+* _Edit `.env-template` menjadi `.env` dan tambahkan credential di dalamnya._
+* _Setting `.env` diperlukan agar app dapat berjalan sebagaimana semestinya_ :
+* _Berikan `JWT_SECRET` yang sudah ditentukan._
+* _Dapatkan `SPOONACULAR_API_KEY` dari Spoonacular API._
+* _Dapatkan `CLIENT_ID` dari membuat Google OAuth._
+* _Berikan `DEFAULT_PASSWORD` untuk user yang login dengan Google OAuth_.
+* _Jalankan `npm run db:teardown` untuk mendelete database._
+* _Jalankan `npm run db:setup` untuk membuat database dari awal lagi._
+* _Jalankan `npm run dev` untuk menjalankan applikasi server side._
 
 
 ## Available Endpoint
@@ -26,6 +31,10 @@ _Users_
 
 * `POST /users/register`
 * `POST /users/login`
+
+_3rd Party Endpoint_
+
+* `GET /trivia`
 
 ## RESTful Endpoint
 
@@ -585,7 +594,7 @@ _Users_
   Jika validasi tidak terpenuhi
 
   ```
- {
+  {
     "errors": [
       "Wrong email or password"
     ]
@@ -603,3 +612,24 @@ _Users_
     ]
   }
   ```
+
+***Getting Started for Server Side***
+
+* _Open client side folder._
+* _Pastikan pada header `index.html`, '`content=`value' sama dengan `CLIENT_ID` di `.env` client server :_
+
+  ```
+  <meta name="google-signin-client_id" content="1076229678650-cqpthqnp1b394dncrg6mq1ai7l65pasf.apps.googleusercontent.com">
+  ```
+
+* _Install `Live Server` extension di vsCode untuk menampilkan applikasi di browser._
+* _Jalankan `index.html` dengan `Live Server`._
+
+
+***How to Use Cooking Todo app***
+
+* _Login atau buat akun baru._
+* _Setelah login user akan ditujukan ke cooking todo list._
+* _Buat todo baru jika belum ada._
+* _User juga dapat menghapus/edit/mengganti status todo dengan button yang tersedia di tiap todo nya._
+* _Terdapat juga Food Trivia button yang akan meng-generate trivia yang diambil dari database Spoonacular API._

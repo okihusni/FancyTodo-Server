@@ -6,15 +6,15 @@ class TodosController {
 
     Todo.create({ title, description, status, due_date, userId: req.userId })
     .then(todo => {
-        res.status(201).json({ data: todo });
+      res.status(201).json({ data: todo });
     })
     .catch(err => { next(err) });
   };
 
   static getTodos(req, res, next) {
-    Todo.findAll({where: { userId: req.userId } })
+    Todo.findAll({ where: { userId: req.userId }, order: [['id', 'DESC']] })
     .then(todos => {
-        res.status(200).json({ data: todos });
+      res.status(200).json({ data: todos });
     })
     .catch(err =>  next(err) );
   };
@@ -41,7 +41,6 @@ class TodosController {
   static patchTodosId(req, res, next) {
     const { status } = req.body;
     const { todo } = req;
-    console.log(todo);
 
     todo.status = status;
     todo.save()

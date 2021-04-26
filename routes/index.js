@@ -6,10 +6,16 @@ const axios = require('axios');
 
 router.get('/', (req, res) => res.send('home'));
 router.use('/users', usersRouter);
-router.get('/quotes', (req, res) => {
-  axios.get('http://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en')
+router.get('/trivia', (req, res) => {
+  axios({
+    method: 'get',
+    url: 'https://api.spoonacular.com/food/trivia/random',
+    params: {
+      apiKey: process.env.SPOONACULAR_API_KEY
+    }
+  })
   .then(({data}) => {
-    res.status(200).json({ quote: data.quoteText, author: data.quoteAuthor })
+    res.status(200).json({ trivia: data })
   })
   .catch(err => {
     res.status(500).json(err)
