@@ -4,7 +4,6 @@ const errorHandler = (err, req, res, next) => {
 
   switch(err.name) {
     case 'SequelizeValidationError':
-      console.log(err.errors.map((el) => el.message));
       statusCode = 400;
       errors = err.errors ? err.errors.map((el) => el.message) : [];
       break;
